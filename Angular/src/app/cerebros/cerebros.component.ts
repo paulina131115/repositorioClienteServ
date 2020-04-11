@@ -60,40 +60,6 @@ export class CerebrosComponent implements OnInit {
     CerebrosComponent._trigger = value;
   }
 
-  /*title = 'zombies';
-  name = 'E1000io';
-  persona = {
-    edad: 19,
-    altura: '178',
-    carrera: 'ISW'
-  };
-  cerebros = [
-    {
-      sabor: 'Chocolate',
-      iq: 100,
-      descripcion: 'Con chispas de chocolate',
-      imagen: 'Chocolate.jpg'
-    },
-    {
-      sabor: 'Fresa',
-      iq: 90,
-      descripcion: 'Con pedacitos de fresa',
-      imagen: 'Fresa.jpg'
-    },
-    {
-      sabor: 'Vainilla',
-      iq: 80,
-      descripcion: 'Con sabor a vainilla',
-      imagen: 'Vainilla.jpg'
-    },
-    {
-      sabor: 'Franbuesa',
-      iq: 70,
-      descripcion: 'Con sabor a frambuesa',
-      imagen: 'Frambuesa.jpg'
-    }
-  ];
-  */
   Agregar() {
     // tslint:disable-next-line: prefer-const
     let cerebro = {

@@ -20,6 +20,7 @@
             <td>
                 <button (click)="guardarDatos(cerebro._id,cerebro.flavor,cerebro.iq,cerebro.description,cerebro.picture)" type="button" class="btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#modalActualizarCerebro">Editar Cerebro <i class="fas fa-edit" title="Editar"></i></button>
                 <button (click)="guardarID(cerebro._id)" type="button" class="btn mr-2 mb-2 btn-danger" data-toggle="modal" data-target="#modalEliminarCerebro">Eliminar Cerebro <i class="fas fa-trash" title="Editar"></i></button>
+                <button (click)="guardarDatos(cerebro.id,cerebro.flavor,cerebro.iq,cerebro.description,cerebro.picture)" type="button" class="btn mr-2 mb-2 btn-success" data-toggle="modal" data-target="#modalPedirCerebro">Pedir Cerebro<i class="fas fa-dollar-sign" title="Pedir"></i></button>
             </td> 
         </tr>
         </tbody>

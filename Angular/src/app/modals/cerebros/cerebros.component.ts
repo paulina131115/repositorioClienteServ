@@ -12,11 +12,14 @@ export class CerebrosModalsComponent implements OnInit {
   @ViewChild('modal') public modal: ElementRef;
   @ViewChild('modalEliminar') public modalEliminar: ElementRef;
   @ViewChild('modalActualizar') public modalActualizar: ElementRef;
+  @ViewChild('modalPedir') public modalPedir:ElementRef;
   id: string;
   sabor: string;
   descripcion: string;
   iq: number;
   foto: string;
+  envioType:string;
+  quantity:number;
   trigger: boolean;
 
   constructor(private dataService: DataService, private _renderer: Renderer2) { }
@@ -90,6 +93,40 @@ export class CerebrosModalsComponent implements OnInit {
       }
     });
   }
+
+
+  pedirCerebro() {
+    var element = document.getElementById("mensajeAlertaGuardarCerebros");
+    element.innerHTML = "";
+    console.log(this.sabor, this.descripcion, this.iq, this.foto,this.envioType,this.quantity);
+    var usuarioId = localStorage.getItem('userId')
+    this.dataService.pedirCerebro(this.sabor, this.descripcion, this.iq, this.foto, usuarioId,this.envioType,this.quantity)
+      .subscribe((resultado) => {
+      console.log(resultado);
+      this._renderer.selectRootElement(this.modal.nativeElement, true).click();
+      this.dataService.obtenerCerebros();
+      this.sabor =""; 
+      this.descripcion = "";
+      this.iq = 0;
+      this.foto= "";
+      this.envioType="";
+      this.quantity=0;
+      localStorage.removeItem("_id");
+    }, (error) => {
+      console.log( error );
+      if (error.error.mensajeError != 0) {
+        (error.error.mensajeError).forEach(function(mensajeError) {
+          element.innerHTML = element.innerHTML + "<div class='alert alert-danger alert-dismissible fade show' role='alert'>"+
+          "<strong>" + mensajeError.mensaje +"</strong>" +
+          "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+            "<span aria-hidden='true'>&times;</span>"+
+          "</button>"+
+        "</div>";
+        });
+      }
+    });
+  }
+
 
   actualizarCerebro() {
     var element = document.getElementById("mensajeAlertaActualizarCerebros");

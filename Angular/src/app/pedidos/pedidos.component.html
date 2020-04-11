@@ -1,0 +1,30 @@
+<div class="card-body"><h5 class="card-title">Pedidos</h5>
+    <table class="mb-0 table table-dark">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Sabor</th>
+            <th>Iq</th>
+            <th>Descripcion</th>
+            <th>Imagen</th>
+            <th>Tipo de envío</th>
+            <th>Cantidad</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let pedido of pedidos | async; let i = index">
+            <th scope="row"> {{ i+1 }} </th>
+            <td>{{ pedidos.flavor }}</td>
+            <td>{{ pedidos.iq }}</td>
+            <td>{{ pedidos.description }}</td>
+            <td>{{ pedidos.picture }}</td>
+            <td>{{ pedidos.envioType}}</td>
+            <td>{{ pedidos.quantity }}</td>
+             
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+</div>

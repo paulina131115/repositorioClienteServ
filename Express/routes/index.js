@@ -4,6 +4,7 @@ var router = express.Router();
 var Zombie = require("../models/zombie")
 var Cerebro = require("../models/cerebro")
 var Usuario = require("../models/usuario")
+var Pedido = require ("../models/pedido")
 
 /* GET home page. */
 
@@ -230,6 +231,14 @@ router.get('/prueba', function(req, res) {
 });
 
 
+function listadoPedidos(_alert, _color, req, res) {
+    Pedido.find().exec(function(error, Pedidos) {
+        if (!error) {
+            console.log(Pedidos);
+            res.render('pedido/index', { title: 'Pedidos', coleccion: Pedidos, alert: _alert, color: _color });
+        }
+    });
+}
 
 function listadoCerebros(_alert, _color, req, res) {
     Cerebro.find().exec(function(error, Cerebros) {
@@ -333,6 +342,68 @@ router.post('/users/new', function(req, res) {
         });
     }
 });
+
+router.get('/pedidos/add', function(req, res) {
+    res.render('pedido/add', { alert: 0, color: "" })
+});
+
+
+router.post('/pedidos/new', function(req, res) {
+    var pedido = req;
+    var data = req.body;
+    var nuevoPedido = new Pedido({
+        flavor: data.flavor,
+        description: data.description,
+        iq: data.iq,
+        picture: data.picture,
+        envioType:data.envioType,
+        quantity:data.quantity
+
+    });
+    var json = [];
+    var id = 0;
+    if (nuevoPedido.flavor == "" || nuevoPedidos.description == "") {
+        id++;
+        json.push({ "mensaje": "No has llenado todos los datos, intenta de nuevo.", "id": id });
+        res.render('pedido/add', { alert: json, color: "alert-danger" })
+
+    } else {
+        nuevoPedido.save(function(error) {
+            if (error) {
+
+                if (error.errors.flavor) {
+                    id++;
+                    json.push({ "mensaje": error.errors.flavor.message, "id": id });
+                }
+                if (error.errors.description) {
+                    id++;
+                    json.push({ "mensaje": error.errors.description.message, "id": id });
+                }
+                if (error.errors.iq) {
+                    id++;
+                    json.push({ "mensaje": error.errors.iq.message, "id": id });
+                }
+                if (error.errors.picture) {
+                    id++;
+                    json.push({ "mensaje": "Imagen no seleccionada", "id": id });
+                }
+                if (error.errors.envioType) {
+                    id++;
+                    json.push({ "mensaje": "Tipo de envio no seleccionado", "id": id });
+                }
+                if (error.errors.quantity) {
+                    id++;
+                    json.push({ "mensaje": "Cantidad no seleccionada", "id": id });
+                }
+                res.render('pedido/add', { alert: json, color: "alert-danger" })
+
+            } else {
+                listadoPedidos("Cerebro insertado correctamente", "alert-success", req, res);
+            }
+        });
+    }
+});
+
 
 function indexLogin(_alert, _color, req, res) { 
     res.render('login/index', { title: 'Users', alert: _alert, color: _color });

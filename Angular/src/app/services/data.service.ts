@@ -11,8 +11,10 @@ let apiUrl = environment.apiUrl;
 export class DataService {
   private updateZombies$ = new Subject<any>();
   private updateCerebros$ = new Subject<any>();
+  private updatePedidos$ = new Subject<any>();
   zombiesObservable = this.updateZombies$.asObservable();
   cerebrosObservable = this.updateCerebros$.asObservable();
+  pedidosObservable = this.updatePedidos$.asObservable();
   constructor(private _client: HttpClient) { }
 
 async obtenerZombies() {
@@ -27,6 +29,13 @@ async obtenerCerebros() {
   let ususarioId = localStorage.getItem('userId');
   let cerebros = await this._client.get<any>(apiUrl + 'cerebros?q=' + tipoUsr +'&' + 'p='+ususarioId);
   return this.updateCerebros$.next(cerebros);
+}
+
+async obtenerPedidos() {
+  let tipoUsr = localStorage.getItem('tipoUsuario');
+  let ususarioId = localStorage.getItem('userId');
+  let pedidos = await this._client.get<any>(apiUrl + 'pedidos?q=' + tipoUsr +'&' + 'p='+ususarioId);
+  return this.updatePedidos$.next(pedidos);
 }
 
 graficaCerebros() {
@@ -108,7 +117,19 @@ eliminarCerebro(id: string) {
   let _id = id;
   return this._client.delete(apiUrl + 'cerebros/delete/' + _id);
 }
+pedirCerebro(sabor: string, descripcion: string, Iq: number, foto: string, usuarioId: string,envioType:string,quantity:number){
+  let nuevoPedido = {
+    flavor: sabor,
+    description: descripcion,
+    iq: Iq,
+    picture: foto,
+    usuarioId : usuarioId,
+    envioType: envioType,
+    quantity:quantity
 
+  };
+  return this._client.post(apiUrl + 'pedidos/new', nuevoPedido);
+}
 actualizarCerebro(id: string, sabor: string, descripcion: string, Iq: number, foto: string) {
   let _id = id;
   let cerebroModificado = {

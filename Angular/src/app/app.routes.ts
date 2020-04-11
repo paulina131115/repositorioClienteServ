@@ -5,6 +5,8 @@ import { ZombiesComponent } from './zombies/zombies.component';
 import { CerebrosComponent } from './cerebros/cerebros.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import {PedidosComponent} from './pedidos/pedidos.component';
+
 
 
 const routes: Routes = [
@@ -14,6 +16,7 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'zombies', component: ZombiesComponent },
     { path: 'cerebros', component: CerebrosComponent },
+    { path: 'pedidos', component: PedidosComponent },
     { path: '**', component: NopagefoundComponent}
 ];
 

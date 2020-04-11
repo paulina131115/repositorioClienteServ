@@ -4,6 +4,7 @@ let router = express.Router();
 let Zombie = require('../models/zombie');
 let Cerebro = require('../models/cerebro');
 let Usuario = require("../models/usuario");
+let Pedido = require("../models/pedido")
 
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -336,6 +337,15 @@ function listadoCerebros(_alert, _color, req, res) {
         }
     });
 }
+function listadoPedidos(_alert, _color, req, res) {
+    Pedido.find().exec(function(error, Pedidos) {
+        if (!error) {
+            console.log(Pedidos);
+            res.status(200).json({mensajeError:'', mensajeExito: _alert});
+        }
+    });
+}
+
 
 //Usuarios
 
@@ -424,6 +434,85 @@ router.post('/users/new', function(req, res) {
         }
     });
     
+});
+
+router.get('/pedidos', async(req,res) => {
+    if(req.query.q === 'Administrador'){
+     Pedido.find().exec((error,pedidos) => {
+        if(!error)
+        {
+            res.status(200).json(pedidos);
+        }
+        else
+        {
+            res.status(500).json(error);
+        }
+    });
+    }else{
+       Pedido.find().where('userId').equals(req.query.p).exec((error,pedidos) => {
+        if(!error)
+        {
+            res.status(200).json(pedidos);
+        }
+        else
+        {
+            res.status(500).json(error);
+        }
+    });
+    }
+ 
+});
+//Nuevo Pedido
+router.post('/pedidos/new', function(req, res) {
+    var pedido = req;
+    var data = req.body;
+    var newPedido = new Pedido({
+        flavor: data.flavor,
+        description: data.description,
+        iq: data.iq,
+        picture: data.picture,
+        envioType:data.envioType,
+        quantity:data.quantity,
+        usuarioId: data.usuarioId
+    });
+    var json = [];
+    var id = 0;
+    if (newPedido.flavor == "" || newPedido.description == "" || newPedido.flavor == undefined || newPedido.description == undefined
+          || newPedido.usuarioId == undefined || newPedido.usuarioId == "") {
+        id++;
+        json.push({ "mensaje": "Los datos están incompletos", "id": id });
+        res.render('pedido/add', { alert: json, color: "alert-danger" })
+
+    } else {
+        newPedido.save(function(error) {
+            if (error) {
+
+                if (error.errors.flavor) {
+                    id++;
+                    json.push({ "mensaje": error.errors.flavor.message, "id": id });
+                }
+                if (error.errors.description) {
+                    id++;
+                    json.push({ "mensaje": error.errors.description.message, "id": id });
+                }
+                if (error.errors.iq) {
+                    id++;
+                    json.push({ "mensaje": error.errors.iq.message, "id": id });
+                }
+                if (error.errors.picture) {
+                    id++;
+                    json.push({ "mensaje": "Imagen no seleccionada", "id": id });
+                }
+                if (error.errors.usuarioId) {
+                    id++;
+                    json.push({ "mensaje": error.errors.usuarioId.message, "id": id });
+                }
+                res.status(500).json({ mensajeError: json });
+            } else {
+                listadoCerebros("El Pedido se ha insertado correctamente", "alert-success", req, res);
+            }
+        });
+    }
 });
 
 function indexLogin(_alert, _color, req, res) { 

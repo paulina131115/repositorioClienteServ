@@ -25,6 +25,7 @@ import { RegisterComponent } from './register/register.component';
 
 import { ChartsModule } from 'ng2-charts';
 import { BarrasComponent } from './graficas/barras/barras.component';
+import { PedidosComponent } from './pedidos/pedidos.component';
 
 
 
@@ -46,7 +47,8 @@ import { BarrasComponent } from './graficas/barras/barras.component';
     CerebrosModalsComponent,
     UsuariosComponent,
     RegisterComponent,
-    BarrasComponent
+    BarrasComponent,
+    PedidosComponent
   ],
   imports: [
     BrowserModule,
